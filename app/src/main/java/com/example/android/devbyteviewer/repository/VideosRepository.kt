@@ -16,7 +16,11 @@
 
 package com.example.android.devbyteviewer.repository
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.example.android.devbyteviewer.database.VideosDatabase
+import com.example.android.devbyteviewer.database.asDomainModel
+import com.example.android.devbyteviewer.domain.DevByteVideo
 import com.example.android.devbyteviewer.network.DevByteNetwork
 import com.example.android.devbyteviewer.network.asDatabaseModel
 import kotlinx.coroutines.Dispatchers
@@ -29,6 +33,15 @@ import kotlinx.coroutines.withContext
 
 // Pass in a VideosDatabase object as the class's constructor parameter to access the DAO methods
 class VideosRepository(private val database: VideosDatabase) {
+
+    // Retrieve data from the database using LiveData object
+    // Use Transformations.map to convert the list of database objects to a list of domain objects
+    val videos: LiveData<List<DevByteVideo>> = Transformations.map(database.videoDao.getVideos()) {
+
+        // ... using the asDomainModel() conversion function defined in DatabaseEntities.kt file
+        it.asDomainModel()
+
+    }
 
     // Coroutine: This method will be the API used to refresh the offline cache.
     suspend fun refreshVideos() {
