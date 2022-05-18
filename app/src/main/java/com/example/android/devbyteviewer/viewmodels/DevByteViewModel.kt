@@ -47,6 +47,7 @@ class DevByteViewModel(application: Application) : AndroidViewModel(application)
     // TODO: Replace the MutableLiveData and backing property below to a reference to the 'videos'
     // TODO: from the VideosRepository
 
+    // for holding a LiveData list of videos from the repository.
     val playlist = videosRepository.videos
 
     /**
@@ -94,6 +95,8 @@ class DevByteViewModel(application: Application) : AndroidViewModel(application)
     init {
         // TODO: Replace with a call to the refreshDataFromRepository9) method
         // refreshDataFromNetwork()
+
+        // This code fetches the video playlist from the repository, not directly from the network.
         refreshDataFromRepository()
 
     }
@@ -110,7 +113,15 @@ class DevByteViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch {
 
             try {
+
+                // The old method, refreshDataFromNetwork(), fetched the video playlist from the network using the Retrofit library
+                // The new method loads the video playlist from the repository.
+
+                // The repository determines which source (e.g., the network, database, etc.) the
+                // playlist is retrieved from, keeping the implementation details out of the view mode
                 videosRepository.refreshVideos()
+
+                // Set FALSE values for Network Error
                 _eventNetworkError.value = false
                 _isNetworkErrorShown.value = false
 
@@ -118,6 +129,8 @@ class DevByteViewModel(application: Application) : AndroidViewModel(application)
 
                 // Show a Toast error message and hide the progress bar.
                 if (playlist.value.isNullOrEmpty())
+
+                // Display Network Error
                     _eventNetworkError.value = true
 
             }
