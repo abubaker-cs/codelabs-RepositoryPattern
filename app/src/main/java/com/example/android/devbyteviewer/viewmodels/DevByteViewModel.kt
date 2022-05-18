@@ -45,7 +45,7 @@ class DevByteViewModel(application: Application) : AndroidViewModel(application)
      * A playlist of videos displayed on the screen.
      */
     // TODO: Replace the MutableLiveData and backing property below to a reference to the 'videos'
-    // TODO: from the VideosRepository
+    // TODO : from the VideosRepository
 
     // for holding a LiveData list of videos from the repository.
     val playlist = videosRepository.videos
